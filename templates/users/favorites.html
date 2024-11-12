@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Your Favorite Recipes</h1>
+
+<h2>{{ user.username }}'s Created Recipes</h2>
+<div class="recipe-grid">
+    {% for item in user_created_favorites %}
+        <div class="recipe-card">
+            <img src="{{ item['recipe'].image_url }}" alt="{{ item['recipe'].title }}" class="recipe-image">
+            <h4>{{ item['recipe'].title }}</h4>
+            <a href="{{ url_for('recipe_detail', recipe_id=item['favorite'].recipe_id) }}" class="btn btn-primary">View Recipe</a>
+            <form method="POST" action="{{ url_for('remove_favorite', favorite_id=item['favorite'].id) }}" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Remove</button>
+            </form>
+        </div>
+    {% endfor %}
+</div>
+
+<h2>Spoonacular Recipes</h2>
+<div class="recipe-grid">
+    {% for item in spoonacular_favorites %}
+        <div class="recipe-card">
+            <img src="{{ item['spoonacular_recipe']['image'] if item['spoonacular_recipe'] else '/static/images/default.jpg' }}" alt="{{ item['spoonacular_recipe']['title'] if item['spoonacular_recipe'] else 'Recipe Image' }}" class="recipe-image">
+            <h4>{{ item['spoonacular_recipe']['title'] if item['spoonacular_recipe'] else "Unknown Title" }}</h4>
+            <a href="{{ url_for('recipe_detail', spoonacular_id=item['favorite'].spoonacular_id) }}" class="btn btn-primary">View Recipe</a>
+            <form method="POST" action="{{ url_for('remove_favorite', favorite_id=item['favorite'].id) }}" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Remove</button>
+            </form>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+

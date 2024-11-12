@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>FoodFriends</title>
+
+  <link rel="stylesheet"
+        href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
+  <script src="https://unpkg.com/jquery"></script>
+  <script src="https://unpkg.com/popper"></script>
+  <script src="https://unpkg.com/bootstrap"></script>
+
+  <link rel="stylesheet"
+        href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+  <link rel="stylesheet" href="/static/stylesheets/style.css">
+  <link rel="shortcut icon" href="/static/favicon.ico">
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+<nav class="navbar navbar-expand">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a href="/" class="navbar-brand">
+        <img src="/static/images/foodfriends-logo.png" alt="logo">
+        <span>FoodFriends</span>
+      </a>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      {% if request.endpoint != None %}
+      <li>
+        <form class="navbar-form navbar-right" action="{{ url_for('search_users') }}" method="GET">
+          <input name="query" class="form-control" placeholder="Search for FoodFriends" id="search">
+          <button type="submit" class="btn btn-default">
+            <span class="fa fa-search"></span>
+          </button>
+        </form>
+      </li>
+      {% endif %}
+      {% if not g.user %}
+      <li><a href="/signup">Sign up</a></li>
+      <li><a href="/login">Log in</a></li>
+      {% elif g.user %}
+      <li>
+        <a href="{{ url_for('user_homepage', user_id=g.user.id) }}">
+          <img src="{{ g.user.image_url or url_for('static', filename='images/default-pic.png') }}" alt="{{ g.user.username }}">
+        </a>
+      </li>
+      <li><a href="/recipes/new">New Recipe</a></li>
+      <li><a href="/logout">Log out</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
+<div class="container">
+  {% for category, message in get_flashed_messages(with_categories=True) %}
+  <div class="alert alert-{{ category }}">{{ message }}</div>
+  {% endfor %}
+
+  {% block content %}
+  {% endblock %}
+
+</div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <h2>All Users</h2>
+
+  {% if search_query %}
+    <h4>Search Results for "{{ search_query }}":</h4>
+  {% endif %}
+
+  <div class="user-grid">
+    {% for user in users %}
+      <div class="user-card">
+        <img src="{{ user.image_url or url_for('static', filename='images/default-pic.png') }}" alt="User image" class="user-image">
+        <p>@{{ user.username }}</p>
+        
+        <div class="user-actions">
+          <a href="{{ url_for('show_user', user_id=user.id) }}" class="btn btn-primary">View Profile</a>
+          {% if user.id != g.user.id %}
+            <form action="{{ url_for('add_friend', friend_id=user.id) }}" method="post">
+              <button type="submit" class="btn btn-secondary">Add Friend</button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if not users %}
+    <p>No users found.</p>
+  {% endif %}
+
+  <!-- Pagination controls -->
+  <nav aria-label="User pagination">
+    <ul class="pagination justify-content-center">
+      {% if users.has_prev %}
+        <li class="page-item">
+          <a class="page-link" href="{{ url_for('find_users', page=users.prev_num) }}">Previous</a>
+        </li>
+      {% endif %}
+      {% for page_num in users.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+        {% if page_num %}
+          <li class="page-item {% if page_num == users.page %}active{% endif %}">
+            <a class="page-link" href="{{ url_for('find_users', page=page_num) }}">{{ page_num }}</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">...</span></li>
+        {% endif %}
+      {% endfor %}
+      {% if users.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="{{ url_for('find_users', page=users.next_num) }}">Next</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+{% endblock %}
+

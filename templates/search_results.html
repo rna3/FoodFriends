@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="search-container">
+    <form method="POST" action="{{ url_for('search_recipes') }}" class="form-inline my-2 my-lg-0">
+      {{ form.hidden_tag() }}
+      <input class="form-control mr-sm-2" type="search" placeholder="Search Recipes" aria-label="Search" name="query" value="{{ form.query.data if form.query.data else '' }}">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+
+<div class="search-results">
+    <h3>Search Results for "{{ query }}"</h3>
+
+    <div class="recipe-grid">
+        {% if recipes %}
+            {% for recipe in recipes %}
+            <div class="recipe-card">
+                <img src="{{ recipe.image }}" alt="{{ recipe.title }}" class="recipe-image">
+                <h4>{{ recipe.title }}</h4>
+                <a href="/recipes/spoonacular/{{ recipe.spoonacular_id }}" class="btn btn-info">View Recipe</a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No recipes found for your search query.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

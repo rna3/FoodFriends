@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if is_user_created %}
+<div class="recipe-detail">
+    <h1 class="recipe-title">{{ recipe.title }}</h1>
+    <div class="recipe-image-container">
+        <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}" class="recipe-image">
+    </div>
+
+    <form action="{{ url_for('add_to_favorites') }}" method="POST">
+        {% if is_user_created %}
+            <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
+        {% else %}
+            <input type="hidden" name="spoonacular_id" value="{{ recipe.id }}">
+        {% endif %}
+        <button type="submit" class="btn btn-primary">Add to Favorites</button>
+    </form>
+    
+
+    <h3>Ingredients:</h3>
+    <ul>
+        {% for ingredient in recipe.ingredients.split(",") %}
+            <li>{{ ingredient.strip() }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Instructions:</h3>
+    <ol>
+        {% for step in recipe.instructions.split('.') %}
+            {% if step.strip() %}
+                <li>{{ step.strip() }}</li>
+            {% endif %}
+        {% endfor %}
+    </ol>
+
+</div>
+{% else %}
+<div class="recipe-detail">
+    <h1 class="recipe-title">{{ recipe.title }}</h1>
+    <div class="recipe-image-container">
+        <img src="{{ recipe.image }}" alt="{{ recipe.title }}" class="recipe-image">
+    </div>
+
+    <form action="{{ url_for('add_to_favorites') }}" method="POST">
+        {% if is_user_created %}
+            <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
+        {% else %}
+            <input type="hidden" name="spoonacular_id" value="{{ recipe.spoonacular_id }}">
+        {% endif %}
+        <button type="submit" class="btn btn-primary">Add to Favorites</button>
+    </form>
+
+    <h3>Ingredients:</h3>
+    <ul>
+        {% for ingredient in recipe.ingredients %}
+            <li>{{ ingredient.strip() }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Instructions:</h3>
+    {% if recipe.instructions %}
+        <ol>
+            {% for step in recipe.instructions %}
+                <li>{{ step }}</li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p>No instructions available.</p>
+    {% endif %}
+
+</div>
+{% endif %}
+{% endblock %}

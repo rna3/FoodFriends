@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{ user.username }}'s Friends</h1>
+        
+        <div class="row">
+            {% for friend in friends %}
+                <div class="col-md-4">
+                    <div class="card user-card">
+                        <img src="{{ friend.image_url or '/static/images/default-profile.png' }}" class="card-img-top" alt="{{ friend.username }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ friend.username }}</h5>
+                            <p class="card-text">
+                                {{ friend.bio or "This user has no bio." }}
+                            </p>
+                            <a href="{{ url_for('user_homepage', user_id=friend.id) }}" class="btn btn-primary">View Profile</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

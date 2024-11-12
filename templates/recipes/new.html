@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="text-center">Add a New Recipe</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
+
+      <div class="form-group">
+        {{ form.title.label(class="form-label") }}
+        {{ form.title(class="form-control") }}
+        {% if form.title.errors %}
+          <div class="text-danger">{{ form.title.errors[0] }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        {{ form.ingredients.label(class="form-label") }}
+        {{ form.ingredients(class="form-control") }}
+        {% if form.ingredients.errors %}
+          <div class="text-danger">{{ form.ingredients.errors[0] }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        {{ form.instructions.label(class="form-label") }}
+        {{ form.instructions(class="form-control") }}
+        {% if form.instructions.errors %}
+          <div class="text-danger">{{ form.instructions.errors[0] }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        {{ form.image_url.label(class="form-label") }}
+        {{ form.image_url(class="form-control") }}
+        {% if form.image_url.errors %}
+          <div class="text-danger">{{ form.image_url.errors[0] }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-check">
+        {{ form.is_public(class="form-check-input") }}
+        {{ form.is_public.label(class="form-check-label") }}
+      </div>
+
+      <button type="submit" class="btn btn-primary">Add Recipe</button>
+    </form>
+  </div>
+{% endblock %}

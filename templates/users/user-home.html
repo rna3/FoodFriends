@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="user-card-wrapper">
+    <!-- Existing user info and stats -->
+    <div class="card user-card text-center">
+      <div class="image-wrapper">
+        <img src="{{ user.header_image_url }}" alt="" class="card-hero">
+      </div>
+      <a href="/users/{{ user.id }}" class="card-link">
+        <img src="{{ user.image_url or url_for('static', filename='images/default-pic.png') }}" 
+             alt="Image for {{ user.username }}" 
+             class="card-image">
+        <p>@{{ user.username }}</p>
+      </a>
+      <!-- Stats section -->
+      <ul class="user-stats nav nav-pills justify-content-center">
+        <li class="stat">
+          <p class="small">My Recipes</p>
+          <h4><a href="/users/{{ user.id }}/recipes">{{ recipes | length }}</a></h4>
+        </li>
+        <li class="stat">
+          <p class="small">Favorites</p>
+          <h4><a href="/users/{{ user.id }}/favorites">{{ favorites | length }}</a></h4>
+        </li>
+        <li class="stat">
+          <p class="small">Friends</p>
+          <h4><a href="/users/{{ user.id }}/friends">{{ friends }}</a></h4>
+        </li>
+      </ul>
+
+      <!-- Friend request actions for other users -->
+      {% if g.user and g.user.id != user.id and not is_friend %}
+        <form action="/users/{{ user.id }}/add" method="POST">
+          <button type="submit" class="btn btn-primary">Add Friend</button>
+        </form>
+      {% endif %}
+    </div>
+
+    <!-- Pending friend requests section (only for the current user viewing their own page) -->
+    {% if g.user and g.user.id == user.id %}
+      {% if pending_requests %}
+        <h3>Pending Friend Requests</h3>
+        <ul>
+          {% for request in pending_requests %}
+            <li>
+              <p>@{{ request.sender.username }}</p>
+              <form action="/users/{{ request.sender.id }}/accept" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-success btn-sm">Accept</button>
+              </form>
+              <form action="/users/{{ request.sender.id }}/reject" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+              </form>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No pending friend requests.</p>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+
