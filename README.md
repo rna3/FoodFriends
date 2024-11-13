@@ -13,3 +13,6 @@
 - **Frontend**: HTML, CSS, JavaScript, Jinja2 templates
 - **Backend**: Flask, SQLAlchemy, PostgreSQL, Spoonacular API
 - **Deployment**: Render
+
+## Deployed URL
+- https://foodfriends.onrender.com
